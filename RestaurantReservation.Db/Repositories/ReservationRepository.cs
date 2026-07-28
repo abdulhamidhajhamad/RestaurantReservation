@@ -52,4 +52,8 @@ public class ReservationRepository
         _context.Reservations.Remove(reservation);
         await _context.SaveChangesAsync();
     }
+    public async Task<List<Reservation>> GetReservationsByCustomer(int id)
+    {
+        return await _context.Reservations.Where(e => e.CustomerId == id).ToListAsync();
+    }
 }

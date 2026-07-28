@@ -52,4 +52,24 @@ public class OrderRepository
         _context.Orders.Remove(order);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Order>> ListOrdersAndMenuItems(int reservationId)
+    {
+        return await _context.Orders.Where(o => o.ReservationId == reservationId)
+            .Include(OrderItem => OrderItem.OrderItems)
+            .ThenInclude(MenuItem=> MenuItem.MenuItem).ToListAsync();
+    }
+    public async Task<List<MenuItem>> ListOrderedMenuItems(int ReservationId)
+    {
+        return await _context.Orders.Where(e => e.ReservationId == ReservationId)
+            .SelectMany(order => order.OrderItems).Select(menuItem => menuItem.MenuItem).ToListAsync();
+        
+    }
+
+    public async Task<decimal> CalculateAverageOrderAmount(int EmployeeId)
+    {
+        return await _context.Orders
+            .Where(o => o.EmployeeId == EmployeeId)
+            .AverageAsync(o => o.TotalAmount);
+    }
 }

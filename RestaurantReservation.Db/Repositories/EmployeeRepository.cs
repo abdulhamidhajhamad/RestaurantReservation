@@ -52,4 +52,9 @@ public class EmployeeRepository
         _context.Employees.Remove(employee);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Employee>> ListManagers()
+    {
+        return await _context.Employees.Where(e => e.Position == "Manager").ToListAsync();
+    }
 }
