@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestaurantReservation.Db.Entities;
@@ -5,6 +6,7 @@ namespace RestaurantReservation.Db.Entities;
 [Table("MenuItems")]
 public class MenuItem
 {
+    [Key]
     [Column("item_id")]
     public int ItemId { get; set; }
 
