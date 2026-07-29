@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Entities;
+using RestaurantReservation.Db.Entities.Views;
 using RestaurantReservation.Db.Seeds;
-
+using RestaurantReservation.Db.Entities.Views;
 namespace RestaurantReservation.Db.Context;
 
 public class RestaurantReservationDbContext : DbContext
@@ -18,7 +19,8 @@ public class RestaurantReservationDbContext : DbContext
     public DbSet<MenuItem> MenuItems { get; set; }
     public DbSet<Restaurant> Restaurants { get; set; }
     public DbSet<Table> Tables { get; set; }
-
+    public DbSet<ReservationWithCustomerRestaurantView> ReservationWithCustomerRestaurantViews { get; set; }
+    public DbSet<EmployeeWithRestaurantView> EmployeeWithRestaurantViews { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer("Server=ABDULHAMID-HAJH;Database=RestaurantReservationCore;Trusted_Connection=True;TrustServerCertificate=True;");
@@ -35,7 +37,15 @@ public class RestaurantReservationDbContext : DbContext
         modelBuilder.Entity<Order>().HasOne(e=>e.Employee).WithMany(r=>r.Orders).HasForeignKey(e=>e.EmployeeId);
         modelBuilder.Entity<Order>().HasOne(e=>e.Reservation).WithMany(r=>r.Orders).HasForeignKey(e=>e.ReservationId);
         modelBuilder.Entity<OrderItem>().HasOne(e=>e.Order).WithMany(r=>r.OrderItems).HasForeignKey(e=>e.OrderId);
+        
         modelBuilder.Entity<OrderItem>().HasOne(e=>e.MenuItem).WithMany(r=>r.OrderItems).HasForeignKey(e=>e.ItemId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<ReservationWithCustomerRestaurantView>()
+            .HasNoKey()
+            .ToView("vw_ReservationsWithCustomerAndRestaurant");
+        modelBuilder.Entity<EmployeeWithRestaurantView>()
+            .HasNoKey()
+            .ToView("vw_EmployeesWithRestaurant");
+        
         RestaurantSeed.Seed(modelBuilder);
         CustomerSeed.Seed(modelBuilder);
         TableSeed.Seed(modelBuilder);

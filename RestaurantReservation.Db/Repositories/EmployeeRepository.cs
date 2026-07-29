@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Context;
 using RestaurantReservation.Db.Entities;
+using RestaurantReservation.Db.Entities.Views;
 
 namespace RestaurantReservation.Db.Repositories;
 
@@ -56,5 +57,10 @@ public class EmployeeRepository
     public async Task<List<Employee>> ListManagers()
     {
         return await _context.Employees.Where(e => e.Position == "Manager").ToListAsync();
+    }
+    public async Task<List<EmployeeWithRestaurantView>> GetEmployeesWithRestaurant()
+    {
+        return await _context.EmployeeWithRestaurantViews
+            .ToListAsync();
     }
 }
