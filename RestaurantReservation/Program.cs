@@ -4,9 +4,16 @@ using RestaurantReservation.Db.Repositories;
 
 var context = new RestaurantReservationDbContext();
 
+var customerRepository = new CustomerRepository(context);
 
-var restaurantRepository = new RestaurantRepository(context);
+var customers = await customerRepository.GetCustomersByPartySize(3);
 
-var revenue = await restaurantRepository.CalculateRestaurantRevenue(1);
 
-Console.WriteLine($"Restaurant Revenue: {revenue}");
+Console.WriteLine("Customers:");
+
+foreach (var customer in customers)
+{
+    Console.WriteLine(
+        $"{customer.FirstName} {customer.LastName}"
+    );
+}

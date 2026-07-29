@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Entities;
 using RestaurantReservation.Db.Entities.Views;
 using RestaurantReservation.Db.Seeds;
+using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Entities.Views;
 namespace RestaurantReservation.Db.Context;
 
@@ -21,6 +22,7 @@ public class RestaurantReservationDbContext : DbContext
     public DbSet<Table> Tables { get; set; }
     public DbSet<ReservationWithCustomerRestaurantView> ReservationWithCustomerRestaurantViews { get; set; }
     public DbSet<EmployeeWithRestaurantView> EmployeeWithRestaurantViews { get; set; }
+    public DbSet<CustomerReservationResult> CustomerReservationResults => Set<CustomerReservationResult>();
     public decimal CalculateRestaurantRevenue(int restaurantId)
         => throw new NotImplementedException();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -53,7 +55,9 @@ public class RestaurantReservationDbContext : DbContext
                         new[] { typeof(int) })!
             )
             .HasName("CalculateRestaurantRevenue");
-        
+        modelBuilder.Entity<CustomerReservationResult>()
+            .HasNoKey()
+            .ToView(null);
         RestaurantSeed.Seed(modelBuilder);
         CustomerSeed.Seed(modelBuilder);
         TableSeed.Seed(modelBuilder);

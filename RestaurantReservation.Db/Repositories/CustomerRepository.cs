@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Context;
 using RestaurantReservation.Db.Entities;
-
+using RestaurantReservation.Db.Models;
+using Microsoft.EntityFrameworkCore;
 namespace RestaurantReservation.Db.Repositories;
 
 public class CustomerRepository
@@ -51,5 +52,13 @@ public class CustomerRepository
 
         _context.Customers.Remove(customer);
         await _context.SaveChangesAsync();
+    }
+    public async Task<List<CustomerReservationResult>> GetCustomersByPartySize(int minPartySize)
+    {
+        return await _context.CustomerReservationResults
+            .FromSqlInterpolated(
+                $"EXEC dbo.GetCustomersByPartySize {minPartySize}"
+            )
+            .ToListAsync();
     }
 }
