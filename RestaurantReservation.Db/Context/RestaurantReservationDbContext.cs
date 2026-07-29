@@ -21,6 +21,8 @@ public class RestaurantReservationDbContext : DbContext
     public DbSet<Table> Tables { get; set; }
     public DbSet<ReservationWithCustomerRestaurantView> ReservationWithCustomerRestaurantViews { get; set; }
     public DbSet<EmployeeWithRestaurantView> EmployeeWithRestaurantViews { get; set; }
+    public decimal CalculateRestaurantRevenue(int restaurantId)
+        => throw new NotImplementedException();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer("Server=ABDULHAMID-HAJH;Database=RestaurantReservationCore;Trusted_Connection=True;TrustServerCertificate=True;");
@@ -45,6 +47,12 @@ public class RestaurantReservationDbContext : DbContext
         modelBuilder.Entity<EmployeeWithRestaurantView>()
             .HasNoKey()
             .ToView("vw_EmployeesWithRestaurant");
+        modelBuilder.HasDbFunction(
+                typeof(RestaurantReservationDbContext)
+                    .GetMethod(nameof(CalculateRestaurantRevenue),
+                        new[] { typeof(int) })!
+            )
+            .HasName("CalculateRestaurantRevenue");
         
         RestaurantSeed.Seed(modelBuilder);
         CustomerSeed.Seed(modelBuilder);

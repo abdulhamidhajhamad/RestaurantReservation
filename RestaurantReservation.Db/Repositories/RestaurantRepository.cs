@@ -52,6 +52,12 @@ public class RestaurantRepository
         _context.Restaurants.Remove(restaurant);
         await _context.SaveChangesAsync();
     }
-
-
+    
+    public async Task<decimal> CalculateRestaurantRevenue(int restaurantId)
+    {
+        return await _context.Restaurants
+            .Where(r => r.RestaurantId == restaurantId)
+            .Select(r => _context.CalculateRestaurantRevenue(r.RestaurantId))
+            .FirstAsync();
+    }
 }
