@@ -5,7 +5,7 @@ using RestaurantReservation.Db.Entities.Views;
 
 namespace RestaurantReservation.Db.Repositories;
 
-public class ReservationRepository
+public class ReservationRepository:IReservationRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
