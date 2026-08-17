@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace RestaurantReservation.Db.Entities;
 
 [Table("Employees")]
-public class Employee
+public class  Employee
 {
     [Column("employee_id")]
     public int EmployeeId { get; set; }

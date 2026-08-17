@@ -5,7 +5,7 @@ using RestaurantReservation.Db.Entities.Views;
 
 namespace RestaurantReservation.Db.Repositories;
 
-public class EmployeeRepository
+public class EmployeeRepository:IEmployeeRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
@@ -62,5 +62,10 @@ public class EmployeeRepository
     {
         return await _context.EmployeeWithRestaurantViews
             .ToListAsync();
+    }
+    public async Task<Employee?> GetByNameAsync(string name)
+    {
+        return await _context.Employees
+            .FirstOrDefaultAsync(e => e.FirstName == name || e.LastName == name);
     }
 }
